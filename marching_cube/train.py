@@ -1,16 +1,18 @@
-# Train and validation of the deep marching cubes
+"""Train and validation of the deep marching cubes."""
+import os
+import logging
+import sys
 
 import torch
 from torch.autograd import Variable
 import numpy as np
-import os
-import sys
 import matplotlib as mpl
 mpl.use('Agg')
 import matplotlib.pyplot as plt
+
 sys.path.append(os.path.join(os.getcwd(), 'model/cffi'))
 from utils.visualize import save_occupancy_fig, save_mesh_fig
-from utils.config import parse_args
+from utils import config
 from model.dmc import DeepMarchingCube
 from model.loss import Loss
 from model.table import get_accept_topology
@@ -23,6 +25,8 @@ if torch.cuda.is_available():
 else:
     dtype = torch.FloatTensor
     dtype_long = torch.LongTensor
+
+logger = logging.getLogger(__name__)
 
 
 def run_train_val(model, optimizer, loss_obj, data_train, data_val, args):
@@ -39,6 +43,7 @@ def run_train_val(model, optimizer, loss_obj, data_train, data_val, args):
 
     loss_epochs = []
     loss_evals = []
+    logger.info("Starting training...")
 
     for iepoch in range(curr_epoch+1, args.epoch):
 
@@ -69,11 +74,11 @@ def run_train_val(model, optimizer, loss_obj, data_train, data_val, args):
             loss.backward()
             optimizer.step()
 
-            if args.verbose and np.mod(ibatch, args.verbose_interval) == 0:
+            if np.mod(ibatch, args.verbose_interval) == 0:
                 loss_stages_str = ['loss%d:%f' % (i, l) for i, l in enumerate(loss_stages)]
-                print('id:%d, loss:%f, %s ' % (ibatch, loss.data[0], ', '.join(loss_stages_str))) 
+                logger.debug('id:%d, loss:%f, %s ' % (ibatch, loss.data[0], ', '.join(loss_stages_str))) 
 
-        print('====== epoch:%d, average loss:%f ======' % (iepoch, loss_epoch/args.num_train))
+        logger.info('====== epoch:%d, average loss:%f ======' % (iepoch, loss_epoch/args.num_train))
         loss_epochs.append(loss_epoch/args.num_train)
 
         # save model
@@ -107,7 +112,7 @@ def run_train_val(model, optimizer, loss_obj, data_train, data_val, args):
                 loss_obj.z_grids,
                 iepoch, args, 'train')
 
-        f, axarr = plt.subplots(2, sharex=True)
+        _, axarr = plt.subplots(2, sharex=True)
         axarr[0].plot(np.arange(1, len(loss_epochs)+1), loss_epochs, 'k.-')
         axarr[1].plot(np.arange(1, len(loss_evals)+1)*args.snapshot, loss_evals, 'r.-')
         plt.savefig(os.path.join(args.output_dir, fname + '.png'))
@@ -123,7 +128,8 @@ def run_train_val(model, optimizer, loss_obj, data_train, data_val, args):
 if __name__ == '__main__':
 
     # parse args
-    args = parse_args()
+    args = config.parse_args()
+    config.setup_logging(args, handler=None)
 
     # load data
     args, data_train = load_data(args, dtype, 'train')
@@ -136,7 +142,7 @@ if __name__ == '__main__':
     curr_epoch = 0
     if os.path.isfile(args.model):
         curr_epoch = int(os.path.splitext(args.model)[0][args.model.find('epoch')+len('epoch'):])
-        print("Resuming training from epoch %d ..." % curr_epoch)
+        logger.info("Resuming training from epoch %d ..." % curr_epoch)
         deep_marching_cubes = torch.load(args.model)
     else:
         deep_marching_cubes = DeepMarchingCube(args)
@@ -152,4 +158,4 @@ if __name__ == '__main__':
     # train and validation
     run_train_val(deep_marching_cubes, optimizer, loss_obj, data_train, data_val, args)
 
-    print('Done!') 
+    logger.info('Done!') 

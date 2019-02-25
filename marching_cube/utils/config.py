@@ -1,7 +1,36 @@
 import argparse
-import os
 from configparser import SafeConfigParser
+import logging
+import os
+import sys
 from model.table import get_triangle_table
+
+
+def setup_logging(args, handler=None):
+    """
+    Configures loggers for the system.
+    """
+    log_levels = {
+        'DEBUG': logging.DEBUG,
+        'INFO': logging.INFO,
+        'WARNING': logging.WARNING,
+        'ERROR': logging.ERROR,
+        'CRITICAL': logging.CRITICAL
+    }
+
+    # Configure root logger that other 3rd-party libraries might use for logging
+    logging.basicConfig(
+        level=logging.ERROR,
+        format='%(asctime)s : %(name)s  : %(levelname)s :  %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S',
+        stream=sys.stdout)
+
+    logger = logging.getLogger()
+    if args.verbose:
+        logger.setLevel(log_levels['DEBUG'])
+    else:
+        logger.setLevel(log_levels['INFO'])
+
 
 def str2bool(v):
     if v.lower() in ('yes', 'true', 't', 'y', '1'):

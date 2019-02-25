@@ -1,6 +1,7 @@
-import numpy as np
 import os
 import json
+
+import numpy as np
 import torch
 from torch.autograd import Variable
 from utils.pointTriangleDistance import pointTriangleDistance, pointTriangleDistanceFast

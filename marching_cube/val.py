@@ -1,11 +1,14 @@
+import logging
+import os
+import sys
+
 import numpy as np
 import torch
 from torch.autograd import Variable
-import sys
-import os
 sys.path.append(os.path.join(os.getcwd(), 'model/cffi'))
 import matplotlib as mpl
 mpl.use('Agg')
+
 from utils.visualize import save_occupancy_fig, save_mesh_fig
 from utils.config import parse_args
 from model.table import get_accept_topology
@@ -18,6 +21,8 @@ if torch.cuda.is_available():
 else:
     dtype = torch.FloatTensor
     dtype_long = torch.LongTensor
+
+logger = logging.getLogger(__name__)
 
 
 def run_val(model, loss_obj, data_val, args, phase='train'):
@@ -77,7 +82,7 @@ def run_val(model, loss_obj, data_val, args, phase='train'):
                     itest, args, 'val')
 
 
-    print('')
+    logger.info('')
     return loss_eval
 
 if __name__ == '__main__':
@@ -93,14 +98,14 @@ if __name__ == '__main__':
 
     # initialize the model
     assert(os.path.isfile(args.model))
-    print("Validating with snapshotted model %s ..." % args.model)
+    logger.info("Validating with snapshotted model %s ...", args.model)
     deep_marching_cubes = torch.load(args.model)
     if torch.cuda.is_available():
         deep_marching_cubes.cuda()
 
     # validation
     loss = run_val(deep_marching_cubes, loss_obj, data_val, args, 'val')
-    print('============== average loss:%f' % (loss/args.num_val))
+    logger.info('============== average loss:%f', loss/args.num_val)
 
 
-    print('Done!')
+    logger.info('Done!')
