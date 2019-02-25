@@ -93,7 +93,7 @@ if __name__ == '__main__':
 
     # initialize the model
     assert(os.path.isfile(args.model))
-    print "Validating with snapshotted model %s ..." % args.model
+    print("Validating with snapshotted model %s ..." % args.model)
     deep_marching_cubes = torch.load(args.model)
     if torch.cuda.is_available():
         deep_marching_cubes.cuda()
@@ -103,4 +103,4 @@ if __name__ == '__main__':
     print('============== average loss:%f' % (loss/args.num_val))
 
 
-    print 'Done!' 
+    print('Done!')

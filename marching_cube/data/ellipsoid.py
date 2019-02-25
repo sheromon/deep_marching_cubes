@@ -1,10 +1,10 @@
 # Generate a series of ellipoids 
-import numpy as np
 import os
+import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from numpy.random import uniform 
-from shape import Shape
+from data.shape import Shape
 
 class Ellipsoid(Shape):
 
@@ -33,8 +33,8 @@ if __name__=="__main__":
 		pz = np.random.uniform(0, 0.1),
 		shear = 0.0)
     pts = ellipsoid.random_sample(3000)
-    print pts
-    print pts.shape
+    print(pts)
+    print(pts.shape)
 
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')

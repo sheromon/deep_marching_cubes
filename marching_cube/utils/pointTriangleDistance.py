@@ -43,7 +43,7 @@ def pointTriangleDistanceFast(TRI, P):
     c = torch.dot(E1, E1).expand_as(d)
 
 
-    #print "{0} {1} {2} ".format(B,E1,E0)
+    #print("{0} {1} {2} ".format(B,E1,E0))
     det = a * c - b * b
     s = (b * e - c * d)/(det + eps)
     t = (b * d - a * e)/(det + eps)
@@ -159,7 +159,7 @@ def pointTriangleDistance(TRI, P):
     e = torch.dot(E1, D)
     f = torch.dot(D, D)
 
-    #print "{0} {1} {2} ".format(B,E1,E0)
+    #print("{0} {1} {2} ".format(B,E1,E0))
     det = a * c - b * b
     s = b * e - c * d
     t = b * d - a * e
@@ -337,14 +337,14 @@ if __name__ == '__main__':
     dists = pointTriangleDistanceFast(TRI, P)
     t0 = time.time()-t0
     dists.backward()
-    print dists
-    print TRI.grad.data.numpy()
-    print P.grad.data.numpy()
+    print(dists)
+    print(TRI.grad.data.numpy())
+    print(P.grad.data.numpy())
 
     ## accurate method
     #t1 = time.time()
     #for i in range(P.size()[0]):
     #    dist, reg = pointTriangleDistance(TRI,P[i, :])
-    #    print '%f' % (dist.data[0]-dists[i,0].data[0]), reg
+    #    print('%f' % (dist.data[0]-dists[i,0].data[0]), reg)
     #t1 = time.time()-t1
-    #print "Approximate method time: %f, accurate method time: %f" % (t0, t1)
+    #print("Approximate method time: %f, accurate method time: %f" % (t0, t1))

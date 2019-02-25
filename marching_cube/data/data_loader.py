@@ -1,9 +1,9 @@
-import numpy as np
-from ellipsoid import Ellipsoid
-from cube import Cube
 import os
+import numpy as np
 import torch
 from torch.autograd import Variable
+from data.ellipsoid import Ellipsoid
+from data.cube import Cube
 
 
 import matplotlib.pyplot as plt
@@ -56,7 +56,7 @@ def load_pts(args, phase):
     cached_file = args.cached_train if phase == 'train' else args.cached_val
 
     if os.path.isfile(cached_file):
-        print "Loading cached data from %s..." % cached_file
+        print("Loading cached data from %s..." % cached_file)
         pts = np.load(cached_file)
     else:
         # the shapenet data should be downloaded in advance
@@ -81,7 +81,7 @@ def load_tsdf(args, phase=''):
     assert os.path.isfile(cached_file), \
        "No cached file found for shapenet! Please download the data at first."
 
-    print "Loading cached data from %s..." % cached_file
+    print("Loading cached data from %s..." % cached_file)
 
     return np.load(cached_file)
 
@@ -89,7 +89,7 @@ def load_tsdf(args, phase=''):
 def create_primitive_set(cached_file, phase, args):
     """Sample points from randomly generated primitives"""
 
-    print "No cached data found, creating random primitives..."
+    print("No cached data found, creating random primitives...")
     x_grids = np.arange(0, args.num_cells+1, args.len_cell)
     y_grids = np.arange(0, args.num_cells+1, args.len_cell)
     z_grids = np.arange(0, args.num_cells+1, args.len_cell)
@@ -106,7 +106,7 @@ def create_primitive_set(cached_file, phase, args):
     i = 0
     while i < num_data:
         if args.verbose and np.mod(i, 10) == 0:
-            print "creating sample: %d/%d" % (i, num_data)
+            print("creating sample: %d/%d" % (i, num_data))
 
         s = np.random.uniform(float(args.num_cells)*0.3, float(args.num_cells)*0.35)
         x0 = np.random.uniform(np.median(x_grids)-1, np.median(x_grids)+1)
@@ -154,7 +154,7 @@ def add_perturbation(pts, args):
 
     # incomplete observation, remove all points in a virtual cone
     if args.bias_level>0.0:
-        print "generating incomplete observaton with level %f..." % (args.bias_level)
+        print("generating incomplete observaton with level %f..." % (args.bias_level))
 
         h = args.num_cells
         r = args.num_cells*args.bias_level
@@ -209,7 +209,7 @@ def add_perturbation(pts, args):
     # sample points
     if args.num_sample<pts_sampled.shape[1]:
         if args.verbose:
-            print "sampling %d/%d pts..." % (args.num_sample, pts.shape[1])
+            print("sampling %d/%d pts..." % (args.num_sample, pts.shape[1]))
         pts_sampled = np.zeros((pts_sampled.shape[0],
                                 args.num_sample,
                                 pts_sampled.shape[2]))
@@ -221,7 +221,7 @@ def add_perturbation(pts, args):
     # add noise
     if args.noise>0:
         if args.verbose:
-            print "adding noise to the data, noise level %.02f" % args.noise
+            print("adding noise to the data, noise level %.02f" % args.noise)
         pts_sampled = pts_sampled + np.random.normal(0, args.noise*args.num_cells/2, pts_sampled.shape)
 
     return pts_sampled, pts, pts_removed

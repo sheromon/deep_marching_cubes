@@ -34,14 +34,14 @@ class Loss(object):
         self.occupancyConnectivity = OccupancyModule()
 
         self.acceptTopology = torch.LongTensor(get_accept_topology())
- 	if torch.cuda.is_available():
+        if torch.cuda.is_available():
             self.acceptTopology = self.acceptTopology.cuda()
         flip_indices = torch.arange(self.acceptTopology.size()[0]-1, -1, -1).type(dtype_long)
         self.acceptTopologyWithFlip = torch.cat([self.acceptTopology, 255-self.acceptTopology[flip_indices]], dim=0)
 
         # TODO: consider the topology with 4 triangles only for visualizing, need to be fixed
         self.visTopology = torch.LongTensor(get_accept_topology(4))
- 	if torch.cuda.is_available():
+        if torch.cuda.is_available():
             self.visTopology = self.visTopology.cuda()
 
         # assume that the outside __faces__ of the grid is always free

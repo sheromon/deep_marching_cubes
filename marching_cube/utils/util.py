@@ -3,7 +3,7 @@ import os
 import json
 import torch
 from torch.autograd import Variable
-from pointTriangleDistance import pointTriangleDistance, pointTriangleDistanceFast
+from utils.pointTriangleDistance import pointTriangleDistance, pointTriangleDistanceFast
 from model.table import get_triangle_table, get_unique_triangles, vertices_on_location
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 

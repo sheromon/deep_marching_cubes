@@ -313,7 +313,7 @@ def get_triangle_table(symmetry=1):
     table = []
     ind = []
     num_tri = []
-    for i in range(len(triangle_table)/(symmetry+1)):
+    for i in range(len(triangle_table) // (symmetry + 1)):
         edges = np.asarray(triangle_table[i])
         edges = edges[np.where(edges>-1)]
 
@@ -349,7 +349,7 @@ def get_triangle_table(symmetry=1):
     elif symmetry == 0:
         # insert free and occupied cases into middle to keep consistency with the symmetry case
         # insert the free case
-        loc = len(table)/2
+        loc = len(table) // 2
         table.insert(loc, [])
         ind.insert(loc, 0)
         num_tri.insert(loc, 0)
@@ -431,9 +431,9 @@ def get_connected_inner_cell(triangles, classes):
                 tri_ind2 = offset
                 for tri2 in topology:
                     tri_ind2 += 1
-        	    # two intsersection points means connected
+                    # two intsersection points means connected
                     if len(set(tri1).intersection(set(tri2)))==2:
-        		connected_inner[tri_ind1, tri_ind2]=1
+                        connected_inner[tri_ind1, tri_ind2]=1
         offset += len(topology)  
     return connected_inner
 
@@ -491,7 +491,7 @@ def get_occupancy_table():
 if __name__ == '__main__':
 
     occTable = get_occupancy_table()
-    print occTable
+    print(occTable)
 
 
     table = get_triangle_table()
@@ -500,19 +500,19 @@ if __name__ == '__main__':
         for triangle in topology: 
             triangles.append(triangle)
     for t in table:
-        print t
-    print len(table)
-    print triangles
-    print len(triangles)
+        print(t)
+    print(len(table))
+    print(triangles)
+    print(len(triangles))
 
 
     connected_x, connected_y, connected_z, connected_inner, classes = get_connected_pairs()
-    print classes
+    print(classes)
 
     exit()
 
     triangles_unique, triangles_class = get_unique_triangles(table)
-    print triangles_unique
-    print triangles_class
-    print len(triangles_unique)
+    print(triangles_unique)
+    print(triangles_class)
+    print(len(triangles_unique))
 

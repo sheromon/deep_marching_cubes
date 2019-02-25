@@ -136,7 +136,7 @@ if __name__ == '__main__':
     curr_epoch = 0
     if os.path.isfile(args.model):
         curr_epoch = int(os.path.splitext(args.model)[0][args.model.find('epoch')+len('epoch'):])
-        print "Resuming training from epoch %d ..." % curr_epoch
+        print("Resuming training from epoch %d ..." % curr_epoch)
         deep_marching_cubes = torch.load(args.model)
     else:
         deep_marching_cubes = DeepMarchingCube(args)
@@ -152,4 +152,4 @@ if __name__ == '__main__':
     # train and validation
     run_train_val(deep_marching_cubes, optimizer, loss_obj, data_train, data_val, args)
 
-    print 'Done!' 
+    print('Done!') 

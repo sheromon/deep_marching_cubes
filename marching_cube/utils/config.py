@@ -1,6 +1,6 @@
 import argparse
 import os
-from ConfigParser import SafeConfigParser
+from configparser import SafeConfigParser
 from model.table import get_triangle_table
 
 def str2bool(v):
