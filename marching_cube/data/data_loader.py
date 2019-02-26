@@ -51,6 +51,7 @@ def load_data(args, dtype, phase='train'):
 
     # update args.num_train and args.num_val in case the data is loaded from cached files
     exec('args.num_%s = %d' % (phase, pts.shape[0]))
+    logger.info("Updating args.num_%s to %d'", phase, pts.shape[0])
 
     return args, (pts, pts_gt, voxel)
 

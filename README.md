@@ -48,7 +48,7 @@ Training with ShapeNet data for reimplementing the experiment in the paper (grid
 
     ./train.sh point $DATA_DIR $OUTPUT_DIR
 
-During training, the visualization results will be saved in ```$OUTPUT_DIR``` in .png format for debugging.
+Once per epoch, the visualization results will be saved in ```$OUTPUT_DIR``` in .png format along with loss data in .png and .npz format. Every `snapshot` epochs, the model will be saved as a .pt file. Default values for the `snapshot` configuration parameter and others can be viewed in `config.py` and can be overridden by passing arguments to `train.py`.
 
 ### Validation
 
